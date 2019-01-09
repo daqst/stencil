@@ -394,7 +394,10 @@ export const createRendererPatch = (plt: d.PlatformApi, domApi: d.DomApi): d.Ren
       // only add this to the when the compiler sees we're using an svg somewhere
       isSvgMode = newVNode.elm &&
                   isDef(domApi.$parentElement(newVNode.elm)) &&
-                  ((newVNode.elm as any) as SVGElement).ownerSVGElement !== undefined;
+                  (((newVNode.elm as any) as SVGElement).ownerSVGElement !== undefined ||
+                  (newVNode.elm.nodeType === 3 &&
+                    ((newVNode.elm.parentElement as any) as SVGElement).ownerSVGElement !== undefined
+                  ));
 
       isSvgMode = newVNode.vtag === 'svg' ? true : (newVNode.vtag === 'foreignObject' ? false : isSvgMode);
     }
